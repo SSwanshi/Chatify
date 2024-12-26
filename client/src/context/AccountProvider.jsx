@@ -13,7 +13,7 @@ const AccountProvider = ({children}) => {
     const socket = useRef();
 
     useEffect(()=>{
-        socket.current = io('https://chatify-3gfo.onrender.com');
+        socket.current = io('https://chatify-gqit.onrender.com');
     }, [])
 
 
