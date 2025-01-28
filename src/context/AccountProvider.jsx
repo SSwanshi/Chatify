@@ -13,7 +13,7 @@ const AccountProvider = ({children}) => {
     const socket = useRef();
 
     useEffect(()=>{
-        socket.current = io('ws://localhost:9000'); //socket.current = io('https://chatify-gqit.onrender.com'); // jab deploy hoga tab
+        socket.current = io('https://chatify-socket.onrender.com'); //socket.current = io('https://chatify-gqit.onrender.com'); // jab deploy hoga tab
     }, [])
 
 
