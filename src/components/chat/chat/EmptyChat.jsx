@@ -48,9 +48,12 @@ const Welcome = styled(Typography)`
 `;
 
 const NewFooter = styled(Box)`
-style="text-align: center; padding: 10px; background-color: #f1f1f1; color: #333; font-size: 0.9rem;
-
-`
+    text-align: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+    color: #333;
+    font-size: 0.9rem;
+`;
 
 const EmptyChat = () => {
 
@@ -67,7 +70,7 @@ const EmptyChat = () => {
                             <Welcome>{account.name}</Welcome>
                             <p>Select any Contact ID to Start a Chat</p>
                             <NewFooter >
-                                
+
                             </NewFooter>
                         </Welcome1>
                     </Box>

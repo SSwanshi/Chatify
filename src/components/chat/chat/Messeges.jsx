@@ -36,13 +36,18 @@ const Messages = ({ person, conversation }) => {
     const scrollRef = useRef();
 
     useEffect(() => {
-        socket.current.on('getMessage', data => {
+        const handleMessage = data => {
             setIncomingMessage({
                 ...data,
                 createdAt: Date.now()
             })
-        })
-    }, [socket])
+        };
+        socket.current.on('getMessage', handleMessage);
+
+        return () => {
+            socket.current.off('getMessage', handleMessage);
+        };
+    }, [socket, setIncomingMessage]);
 
     // Fetching messages when conversation changes or new messages are received
     useEffect(() => {
@@ -57,7 +62,7 @@ const Messages = ({ person, conversation }) => {
             }
         };
         getMessageDetails();
-    }, [person._id, conversation?._id, newMessageFlag, setMessages]);
+    }, [conversation?._id, newMessageFlag, setMessages]);
 
     // Scroll to the bottom when messages change
     useEffect(() => {

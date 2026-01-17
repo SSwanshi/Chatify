@@ -26,7 +26,7 @@ const Conversations = ({ text }) => {
             setUsers(filteredData);
         }
         fetchData();
-    }, [text]);
+    }, [text, setUsers]);
 
     useEffect(() => {
         socket.current.emit('addUsers', account);
