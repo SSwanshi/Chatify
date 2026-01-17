@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = 'https://chatify-server-nn6o.onrender.com';
+const url = process.env.REACT_APP_API_URL;
 
 export const addUser = async (data) => {
     try {

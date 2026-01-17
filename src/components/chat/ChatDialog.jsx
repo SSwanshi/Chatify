@@ -10,7 +10,7 @@ const Component = styled(Box)`
 `
 
 const LeftComponent = styled(Box)`
-    margin-top: auto 0;
+    margin: auto 0;
     min-width : 450px;
 `
 const RightComponent = styled(Box)`
