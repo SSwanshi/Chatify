@@ -28,7 +28,7 @@ const Messages = ({ person, conversation }) => {
     const [value, setValue] = useState('');
     const [messages, setMessages] = useState([]);
     const { account, socket, newMessageFlag, setNewMessageFlag } = useContext(AccountContext);
-    
+
     const [file, setFile] = useState();
     const [image, setImage] = useState('');
     const [incomingMessage, setIncomingMessage] = useState(null);
@@ -42,7 +42,7 @@ const Messages = ({ person, conversation }) => {
                 createdAt: Date.now()
             })
         })
-    })
+    }, [socket])
 
     // Fetching messages when conversation changes or new messages are received
     useEffect(() => {
@@ -57,7 +57,7 @@ const Messages = ({ person, conversation }) => {
             }
         };
         getMessageDetails();
-    }, [person._id, conversation?._id, newMessageFlag]);
+    }, [person._id, conversation?._id, newMessageFlag, setMessages]);
 
     // Scroll to the bottom when messages change
     useEffect(() => {
@@ -69,10 +69,10 @@ const Messages = ({ person, conversation }) => {
         }
     }, [messages]);
 
-    useEffect(()=> {
+    useEffect(() => {
         incomingMessage && conversation?.members?.includes(incomingMessage.senderId) &&
-        setMessages(prev => [...prev, incomingMessage])
-    },[incomingMessage, conversation])
+            setMessages(prev => [...prev, incomingMessage])
+    }, [incomingMessage, conversation, setMessages])
 
     const sendText = async (e) => {
         const code = e.keyCode || e.which;
@@ -124,12 +124,12 @@ const Messages = ({ person, conversation }) => {
                 <div ref={scrollRef} />
             </Component>
             <Footer sendText={sendText}
-                setValue={setValue} 
+                setValue={setValue}
                 value={value}
                 file={file}
                 setFile={setFile}
                 setImage={setImage}
-            /> 
+            />
         </Wrapper>
     );
 };

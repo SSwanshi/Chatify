@@ -38,7 +38,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
 
     useEffect(() => {
         const getImage = async () => {
-            if(file) {
+            if (file) {
                 const data = new FormData();
                 data.append("name", file.name);
                 data.append("file", file);
@@ -48,7 +48,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
             }
         }
         getImage();
-    },[file])
+    }, [file, setImage])
 
     const onFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -65,7 +65,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
             <input type='file'
                 id='fileInput'
                 style={{ display: 'none' }}
-                onChange={(e)=> onFileChange(e)}
+                onChange={(e) => onFileChange(e)}
             />
             <Search>
                 <InputField

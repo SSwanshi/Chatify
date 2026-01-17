@@ -58,7 +58,7 @@ const Conversation = ({ user }) => {
             setMessage({ text: data?.message, timestamp: data?.updatedAt });
         }
         getConversationDetails();
-    }, [newMessageFlag]);
+    }, [newMessageFlag, account.sub, user.sub]);
 
     const getUser = async () => {
         setPerson(user);
@@ -67,7 +67,7 @@ const Conversation = ({ user }) => {
 
     const fileText = message?.text && (
         message.text.includes('.pdf') ? 'PDF File' :
-        message.text.match(/\.(jpg|jpeg|png|gif|bmp|svg)$/i) ? 'Image' : null
+            message.text.match(/\.(jpg|jpeg|png|gif|bmp|svg)$/i) ? 'Image' : null
     );
 
     return (
