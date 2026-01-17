@@ -2,7 +2,13 @@ import { Server } from "socket.io";
 
 const io = new Server(9000, {
     cors: {
-        origin: 'https://chatify-t71m.onrender.com' //origin: 'https://chatify-gqit.onrender.com' // jab deploy hoga tab
+        origin: [
+            'http://localhost:3000',
+            'https://chatify-t71m.onrender.com',
+            'https://chatify-one-rho.vercel.app'
+        ],
+        methods: ['GET', 'POST'],
+        credentials: true
     }
 });
 

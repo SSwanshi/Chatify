@@ -6,10 +6,9 @@ import { styled } from '@mui/system';
 const MenuOption = styled(MenuItem)`
     font-size: 14px;
     padding: 15px 60px 5px 34px;
-    color: #4A4A4A;
+    color: #f1f5f9;
     &:hover {
-        background-color: #f0f0f0;
-        color: #4A4A4A;  
+        background-color: rgba(255, 255, 255, 0.1);
     }
 `;
 
@@ -21,21 +20,21 @@ const HeaderMenu = ({ setOpenDrawer }) => {
     };
 
     const handleClick = (e) => {
-        setOpen(e.currentTarget);  
+        setOpen(e.currentTarget);
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('authToken'); 
-        sessionStorage.removeItem('userData'); 
+        localStorage.removeItem('authToken');
+        sessionStorage.removeItem('userData');
 
-        handleClose(); 
-        window.location.reload(); 
+        handleClose();
+        window.location.reload();
     };
 
     return (
         <>
             <IconButton onClick={handleClick} sx={{ padding: 0 }}>
-                <MoreVert sx={{ color: '#fff', '&:hover': { color: '#f0f0f0' } }} />  
+                <MoreVert sx={{ color: '#fff', '&:hover': { color: '#f0f0f0' } }} />
             </IconButton>
             <Menu
                 anchorEl={open}
@@ -49,6 +48,16 @@ const HeaderMenu = ({ setOpenDrawer }) => {
                 transformOrigin={{
                     vertical: 'top',
                     horizontal: 'right',
+                }}
+                PaperProps={{
+                    sx: {
+                        marginTop: 1, // slight offset
+                        backgroundColor: '#1e293b', // Slate 800
+                        color: 'white',
+                        borderRadius: 2,
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
+                    }
                 }}
             >
                 <MenuOption onClick={() => { handleClose(); setOpenDrawer(true); }}>

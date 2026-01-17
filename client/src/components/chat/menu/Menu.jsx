@@ -1,20 +1,20 @@
-import Header from  './Header';
+import Header from './Header';
 import { useState } from 'react';
 
-import {Box} from "@mui/material"
+import { Box } from "@mui/material"
 import Search from './Search';
 import Conversations from './Conversations';
 const Menu = () => {
 
     const [text, setText] = useState('');
-    return(
-        
-        <Box>
+    return (
+
+        <Box style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             <Header />
-            <Search setText={setText}/>
+            <Search setText={setText} />
             <Conversations text={text} />
         </Box>
     )
 }
 
-export  default Menu;
+export default Menu;

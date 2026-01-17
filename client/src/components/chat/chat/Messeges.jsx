@@ -6,18 +6,26 @@ import { newMessage, getMessages } from '../../../service/api';
 import Message from './Message';
 
 const Wrapper = styled(Box)`
-    background-image: url('https://img.freepik.com/free-vector/gradient-dark-dynamic-lines-background_23-2148995950.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    margin-left: 5px;
-    border-radius: 5px;
-    margin-top: 2px;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    flex: 1; // Take remaining space
+    overflow: hidden; // Prevent double scrollbars
 `;
 
 const Component = styled(Box)`
-    height: 80vh;
-    overflow-y: scroll;
+    flex: 1;
+    overflow-y: auto;
+    padding-top: 20px;
+    
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+    }
 `;
 
 const Container = styled(Box)`
@@ -28,7 +36,7 @@ const Messages = ({ person, conversation }) => {
     const [value, setValue] = useState('');
     const [messages, setMessages] = useState([]);
     const { account, socket, newMessageFlag, setNewMessageFlag } = useContext(AccountContext);
-    
+
     const [file, setFile] = useState();
     const [image, setImage] = useState('');
     const [incomingMessage, setIncomingMessage] = useState(null);
@@ -42,7 +50,7 @@ const Messages = ({ person, conversation }) => {
                 createdAt: Date.now()
             })
         })
-    })
+    }, [socket])
 
     // Fetching messages when conversation changes or new messages are received
     useEffect(() => {
@@ -69,14 +77,15 @@ const Messages = ({ person, conversation }) => {
         }
     }, [messages]);
 
-    useEffect(()=> {
+    useEffect(() => {
         incomingMessage && conversation?.members?.includes(incomingMessage.senderId) &&
-        setMessages(prev => [...prev, incomingMessage])
-    },[incomingMessage, conversation])
+            incomingMessage.senderId !== account.sub && // Prevent processing own messages from socket
+            setMessages(prev => [...prev, incomingMessage])
+    }, [incomingMessage, conversation, account.sub])
 
     const sendText = async (e) => {
         const code = e.keyCode || e.which;
-        if (code === 13 && value.trim()) {
+        if (code === 13 && (value.trim() || file)) {
             let message = {};
             if (!file) {
                 message = {
@@ -84,7 +93,8 @@ const Messages = ({ person, conversation }) => {
                     receiverId: person.sub,
                     conversationId: conversation._id,
                     type: 'text',
-                    text: value
+                    text: value,
+                    createdAt: Date.now() // Add timestamp for immediate display
                 };
             } else {
                 message = {
@@ -92,7 +102,8 @@ const Messages = ({ person, conversation }) => {
                     receiverId: person.sub,
                     conversationId: conversation._id,
                     type: 'file',
-                    text: image
+                    text: image,
+                    createdAt: Date.now()
                 };
             }
 
@@ -124,12 +135,13 @@ const Messages = ({ person, conversation }) => {
                 <div ref={scrollRef} />
             </Component>
             <Footer sendText={sendText}
-                setValue={setValue} 
+                setValue={setValue}
                 value={value}
                 file={file}
                 setFile={setFile}
                 setImage={setImage}
-            /> 
+                image={image}
+            />
         </Wrapper>
     );
 };
