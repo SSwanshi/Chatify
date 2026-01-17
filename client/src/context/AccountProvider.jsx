@@ -14,7 +14,7 @@ const AccountProvider = ({ children }) => {
 
     useEffect(() => {
         socket.current = io('https://chatify-socket.onrender.com'); // Production Socket URL
-        // socket.current = io('ws://localhost:9000'); // Localhost for testing port 9000
+        // socket.current = io('ws://localhost:9000'); // Localhost for testing
     }, [])
 
 
