@@ -11,7 +11,6 @@ const app = express();
 const corsOptions = {
     origin: [
         'http://localhost:3000',
-        'https://chatify-t71m.onrender.com',
         'https://chatify-one-rho.vercel.app'
     ],
     credentials: true
@@ -24,6 +23,6 @@ app.use('/', Route);
 
 Connection();
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => console.log(`Server is running successfully on PORT ${PORT}`))
