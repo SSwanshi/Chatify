@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Box, styled, IconButton, Tooltip } from '@mui/material';
+import { Box, styled, Tooltip } from '@mui/material';
 import { AccountContext } from "../../../context/AccountProvider";
 import HeaderMenu from './HeaderMenu';
 import InfoDrawer from '../../drawer/InfoDrawer';
