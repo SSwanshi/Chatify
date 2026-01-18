@@ -3,35 +3,64 @@ import { AddCircleOutline, Close, Send, Description } from '@mui/icons-material'
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { UploadFile } from '../../../service/api';
 
-const Container = styled(Box)`
-    height: 70px;
-    background: #0f172a;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    box-sizing: border-box;
-`;
-
-const InputWrapper = styled(Box)`
-    display: flex;
-    align-items: center;
-    background: rgba(30, 41, 59, 0.7);
-    border-radius: 16px;
-    padding: 8px 16px;
-    flex: 1;
-    margin: 0 12px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all 0.2s ease-in-out;
-    position: relative;
-
-    &:focus-within {
-        background: rgba(30, 41, 59, 0.9);
-        border-color: rgba(99, 102, 241, 0.5);
-        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+const Container = styled(Box)(({ theme }) => ({
+    height: '70px',
+    background: '#0f172a',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    padding: '0 16px',
+    borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+    boxSizing: 'border-box',
+    [theme.breakpoints.down('sm')]: {
+        padding: '0 8px'
     }
-`;
+}));
+
+const InputWrapper = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    background: 'rgba(30, 41, 59, 0.7)',
+    borderRadius: '16px',
+    padding: '8px 16px',
+    flex: 1,
+    margin: '0 12px',
+    border: '1px solid rgba(255, 255, 255, 0.05)',
+    transition: 'all 0.2s ease-in-out',
+    position: 'relative',
+    [theme.breakpoints.down('sm')]: {
+        margin: '0 8px',
+        padding: '8px 12px'
+    },
+    '&:focus-within': {
+        background: 'rgba(30, 41, 59, 0.9)',
+        borderColor: 'rgba(99, 102, 241, 0.5)',
+        boxShadow: '0 0 0 2px rgba(99, 102, 241, 0.1)',
+    }
+}));
+
+const MediaPreview = styled(Box)(({ theme }) => ({
+    position: 'absolute',
+    bottom: '80px',
+    left: '0',
+    right: '0',
+    background: 'rgba(15, 23, 42, 0.9)',
+    backdropFilter: 'blur(16px)',
+    borderRadius: '20px',
+    padding: '20px',
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    zIndex: 1000,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '16px',
+    [theme.breakpoints.down('sm')]: {
+        left: '8px',
+        right: '8px',
+        padding: '16px'
+    }
+}));
 
 const InputField = styled(InputBase)`
     width: 100%;
@@ -42,23 +71,7 @@ const InputField = styled(InputBase)`
     }
 `;
 
-const MediaPreview = styled(Box)`
-    position: absolute;
-    bottom: 80px;
-    left: 0;
-    right: 0;
-    background: rgba(15, 23, 42, 0.9);
-    backdrop-filter: blur(16px);
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-`;
+
 
 const PreviewImage = styled('img')`
     max-width: 100%;
@@ -235,16 +248,26 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
                                     <IconButton
                                         onClick={handleCancelMedia}
                                         disabled={loading}
-                                        sx={{ bgcolor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', '&:hover': { bgcolor: 'rgba(239, 68, 68, 0.2)' } }}
+                                        sx={{
+                                            bgcolor: loading ? 'rgba(255, 255, 255, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                                            color: loading ? '#ffffff !important' : '#ef4444',
+                                            '&:hover': { bgcolor: 'rgba(239, 68, 68, 0.2)' },
+                                            '&.Mui-disabled': { color: '#ffffff', opacity: 0.6 }
+                                        }}
                                     >
                                         <Close />
                                     </IconButton>
                                     <IconButton
                                         onClick={handleSendMedia}
                                         disabled={loading}
-                                        sx={{ bgcolor: 'rgba(16, 185, 129, 0.1)', color: '#10b981', '&:hover': { bgcolor: 'rgba(16, 185, 129, 0.2)' } }}
+                                        sx={{
+                                            bgcolor: loading ? 'rgba(255, 255, 255, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+                                            color: loading ? '#ffffff !important' : '#10b981',
+                                            '&:hover': { bgcolor: 'rgba(16, 185, 129, 0.2)' },
+                                            '&.Mui-disabled': { color: '#ffffff', opacity: 0.6 }
+                                        }}
                                     >
-                                        {loading ? <CircularProgress size={24} color="inherit" /> : <Send />}
+                                        {loading ? <CircularProgress size={24} sx={{ color: '#ffffff' }} /> : <Send />}
                                     </IconButton>
                                 </Box>
                             </MediaPreview>

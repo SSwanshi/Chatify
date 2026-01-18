@@ -4,14 +4,18 @@ import { AccountContext } from "../../../context/AccountProvider";
 import HeaderMenu from './HeaderMenu';
 import InfoDrawer from '../../drawer/InfoDrawer';
 
-const Component = styled(Box)`
-    height: 70px;
-    background: #0f172a;
-    display: flex;
-    padding: 0 24px;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-`;
+const Component = styled(Box)(({ theme }) => ({
+  height: '70px',
+  background: '#0f172a',
+  display: 'flex',
+  padding: '0 24px',
+  alignItems: 'center',
+  borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+  [theme.breakpoints.down('sm')]: {
+    padding: '0 16px'
+  }
+}));
+
 
 const Image = styled('img')({
   height: 44,

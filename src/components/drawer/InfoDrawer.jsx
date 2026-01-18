@@ -1,4 +1,4 @@
-import { Drawer, Typography, IconButton } from '@mui/material';
+import { Drawer, Typography, IconButton, useTheme, useMediaQuery } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { Box, styled } from '@mui/material';
 import Profile from './Profile';
@@ -25,19 +25,22 @@ const StyledTypo = styled(Typography)`
     font-family: 'Outfit', sans-serif;
 `;
 
-const drawerStyle = {
-    left: 0,
-    top: 0,
-    height: '100%',
-    width: '400px', // Matches LeftComponent width
-    boxShadow: 'none',
-    backgroundColor: '#0f172a',
-    borderRight: '1px solid rgba(255, 255, 255, 0.05)',
-};
-
 const InfoDrawer = ({ open, setOpen }) => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const drawerStyle = {
+        left: 0,
+        top: 0,
+        height: '100%',
+        width: isMobile ? '100%' : '400px',
+        boxShadow: 'none',
+        backgroundColor: '#0f172a',
+        borderRight: '1px solid rgba(255, 255, 255, 0.05)',
     };
 
     return (
@@ -67,3 +70,4 @@ const InfoDrawer = ({ open, setOpen }) => {
 };
 
 export default InfoDrawer;
+

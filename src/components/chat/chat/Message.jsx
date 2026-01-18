@@ -5,32 +5,41 @@ import { AccountContext } from '../../../context/AccountProvider'
 import { GetApp, Description } from '@mui/icons-material';
 import { url } from '../../../service/api';
 
-const Own = styled(Box)`
-    background: #6366f1;
-    color: #ffffff;
-    padding: 10px 14px;
-    max-width: 65%;
-    width: fit-content;
-    margin-left: auto;
-    border-radius: 18px 18px 4px 18px;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
-    margin-bottom: 4px;
-    position: relative;
-    word-break: break-word;
-`;
+const Own = styled(Box)(({ theme }) => ({
+    background: '#6366f1',
+    color: '#ffffff',
+    padding: '10px 14px',
+    maxWidth: '65%',
+    width: 'fit-content',
+    marginLeft: 'auto',
+    borderRadius: '18px 18px 4px 18px',
+    boxShadow: '0 4px 12px rgba(99, 102, 241, 0.2)',
+    marginBottom: '4px',
+    position: 'relative',
+    wordBreak: 'break-word',
+    [theme.breakpoints.down('sm')]: {
+        maxWidth: '85%',
+        padding: '8px 12px'
+    }
+}));
 
-const Wrapper = styled(Box)`
-    background: #1e293b;
-    color: #f8fafc;
-    padding: 10px 14px;
-    max-width: 65%;
-    width: fit-content;
-    border-radius: 18px 18px 18px 4px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin-bottom: 4px;
-    position: relative;
-    word-break: break-word;
-`;
+const Wrapper = styled(Box)(({ theme }) => ({
+    background: '#1e293b',
+    color: '#f8fafc',
+    padding: '10px 14px',
+    maxWidth: '65%',
+    width: 'fit-content',
+    borderRadius: '18px 18px 18px 4px',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    marginBottom: '4px',
+    position: 'relative',
+    wordBreak: 'break-word',
+    [theme.breakpoints.down('sm')]: {
+        maxWidth: '85%',
+        padding: '8px 12px'
+    }
+}));
+
 
 const Text = styled(Typography)`
     font-size: 15px;

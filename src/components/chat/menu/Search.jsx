@@ -1,13 +1,17 @@
 import { Search as SearchIcon } from '@mui/icons-material';
 import { InputBase, Box, styled } from '@mui/material';
 
-const Component = styled(Box)`
-    background: #0f172a;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-`;
+const Component = styled(Box)(({ theme }) => ({
+    background: '#0f172a',
+    height: '60px',
+    display: 'flex',
+    alignItems: 'center',
+    padding: '0 16px',
+    [theme.breakpoints.down('sm')]: {
+        padding: '0 8px'
+    }
+}));
+
 
 const Wrapper = styled(Box)`
     display: flex;

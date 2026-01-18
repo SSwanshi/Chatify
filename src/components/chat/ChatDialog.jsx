@@ -9,22 +9,31 @@ const Component = styled(Box)`
     display: flex;
     height: 100vh;
     background: #0f172a;
+    overflow: hidden;
 `;
 
-const LeftComponent = styled(Box)`
-    min-width: 400px;
-    height: 100%;
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
-    background: #0f172a;
-`;
+const LeftComponent = styled(Box)(({ theme, person }) => ({
+    minWidth: '400px',
+    height: '100%',
+    borderRight: '1px solid rgba(255, 255, 255, 0.05)',
+    background: '#0f172a',
+    display: 'block',
+    [theme.breakpoints.down('md')]: {
+        minWidth: '100%',
+        display: person && Object.keys(person).length ? 'none' : 'block'
+    }
+}));
 
-const RightComponent = styled(Box)`
-    flex: 1;
-    height: 100%;
-    background: #0f172a;
-    display: flex;
-    flex-direction: column;
-`;
+const RightComponent = styled(Box)(({ theme, person }) => ({
+    flex: 1,
+    height: '100%',
+    background: '#0f172a',
+    display: 'flex',
+    flexDirection: 'column',
+    [theme.breakpoints.down('md')]: {
+        display: person && Object.keys(person).length ? 'flex' : 'none'
+    }
+}));
 
 const dialogStyle = {
     height: '100%',
@@ -49,15 +58,16 @@ const ChatDialog = () => {
             fullScreen
         >
             <Component>
-                <LeftComponent>
+                <LeftComponent person={person}>
                     <Menu />
                 </LeftComponent>
-                <RightComponent>
+                <RightComponent person={person}>
                     {Object.keys(person).length ? <ChatBox /> : <EmptyChat />}
                 </RightComponent>
             </Component>
         </Dialog>
     );
 }
+
 
 export default ChatDialog;

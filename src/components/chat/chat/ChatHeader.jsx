@@ -1,16 +1,19 @@
 import { useContext, useState } from 'react';
 import { AccountContext } from '../../../context/AccountProvider';
 import { Box, Typography, styled, Menu, MenuItem, IconButton } from '@mui/material';
-import { MoreVert, FiberManualRecord } from '@mui/icons-material';
+import { MoreVert, FiberManualRecord, ArrowBack } from '@mui/icons-material';
 
-const Header = styled(Box)`
-    height: 70px;
-    background: #0f172a;
-    display: flex;
-    padding: 0 24px;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-`;
+const Header = styled(Box)(({ theme }) => ({
+    height: '70px',
+    background: '#0f172a',
+    display: 'flex',
+    padding: '0 24px',
+    alignItems: 'center',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+    [theme.breakpoints.down('sm')]: {
+        padding: '0 12px'
+    }
+}));
 
 const Image = styled('img')({
     width: 44,
@@ -48,7 +51,7 @@ const StatusText = styled(Typography)`
 `;
 
 const ChatHeader = ({ person }) => {
-    const { activeUsers } = useContext(AccountContext);
+    const { activeUsers, setPerson } = useContext(AccountContext);
     const [anchorEl, setAnchorEl] = useState(null);
 
     const isOnline = activeUsers?.find((user) => user.sub === person.sub);
@@ -68,6 +71,16 @@ const ChatHeader = ({ person }) => {
 
     return (
         <Header>
+            <IconButton
+                onClick={() => setPerson({})}
+                sx={{
+                    color: '#94a3b8',
+                    display: { xs: 'block', md: 'none' },
+                    mr: 1
+                }}
+            >
+                <ArrowBack />
+            </IconButton>
             <Image src={person.picture} alt="display picture" />
             <Box>
                 <Name>{person.name}</Name>
@@ -112,4 +125,5 @@ const ChatHeader = ({ person }) => {
 };
 
 export default ChatHeader;
+
 

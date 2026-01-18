@@ -34,27 +34,34 @@ const Component = styled(Box)`
     }
 `;
 
-const Container = styled(Box)`
-    text-align: center;
-    z-index: 10;
-    padding: 40px;
-    background: rgba(30, 41, 59, 0.5);
-    backdrop-filter: blur(12px);
-    border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    max-width: 500px;
-    width: 90%;
-`;
+const Container = styled(Box)(({ theme }) => ({
+    textAlign: 'center',
+    zIndex: 10,
+    padding: '40px',
+    background: 'rgba(30, 41, 59, 0.5)',
+    backdropFilter: 'blur(12px)',
+    borderRadius: '24px',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+    maxWidth: '500px',
+    width: '90%',
+    [theme.breakpoints.down('sm')]: {
+        padding: '24px'
+    }
+}));
 
-const Title = styled(Typography)`
-    font-family: 'Outfit', sans-serif;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #f8fafc;
-    margin-bottom: 8px;
-    letter-spacing: -0.02em;
-`;
+const Title = styled(Typography)(({ theme }) => ({
+    fontFamily: "'Outfit', sans-serif",
+    fontSize: '2.5rem',
+    fontWeight: 700,
+    color: '#f8fafc',
+    marginBottom: '8px',
+    letterSpacing: '-0.02em',
+    [theme.breakpoints.down('sm')]: {
+        fontSize: '1.8rem'
+    }
+}));
+
 
 const UserName = styled('span')`
     color: #ffffff;
