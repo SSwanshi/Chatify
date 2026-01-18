@@ -3,49 +3,41 @@ import { formatDate, downloadMedia } from '../../../utils/common-utils'
 import { useContext } from 'react'
 import { AccountContext } from '../../../context/AccountProvider'
 import GetAppIcon from '@mui/icons-material/GetApp';
-import { iconPDF } from '../../../constants/data';
+import {iconPDF} from '../../../constants/data';
 
 
 const Own = styled(Box)`
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: #fff;
+    background: #D9EAFD;
     max-width: 60%;
     margin-left: auto;
-    padding: 10px 15px;
+    padding: 5px;
     width: fit-content;
     display: flex;
-    flex-direction: column;
-    border-radius: 16px 16px 0 16px;
+    border-radius: 10px;
     word-break: break-word;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-`;
+`
 
 const Wrapper = styled(Box)`
-    background: rgba(51, 65, 85, 0.8); // Dark slate
-    color: #f1f5f9;
+    background:#1E3E62;
     max-width: 60%;
-    padding: 10px 15px;
+    padding: 5px;
     width: fit-content;
     display: flex;
-    flex-direction: column;
-    border-radius: 16px 16px 16px 0;
+    border-radius: 10px;
     word-break: break-word;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-`;
-
+    color: #ededed;
+`
 const Text = styled(Typography)`
-    font-size: 15px;
-    margin-bottom: 4px;
-    line-height: 1.5;
+    font-size: 14px;
+    padding: 0 25px 0 5px;
 `;
 
 const Time = styled(Typography)`
     font-size: 10px;
-    color: rgba(255, 255, 255, 0.6); // Consistent light opacity for both
+    color:rgb(113, 111, 111);
+    margin-top: 6px;
+    word-break: keep-all;
     margin-top: auto;
-    align-self: flex-end;
-    font-weight: 500;
 `;
 
 export const Message = ({ message }) => {
@@ -63,8 +55,8 @@ export const Message = ({ message }) => {
                     :
                     <Wrapper>
                         {
-                            message.type === 'file' ? <ImageMessage message={message} /> : <TextMessage message={message} />
-                        }
+                        message.type === 'file' ? <ImageMessage message={message} /> : <TextMessage message={message} />
+                    }
                     </Wrapper>
             }
         </>
@@ -73,53 +65,27 @@ export const Message = ({ message }) => {
 }
 
 const ImageMessage = ({ message }) => {
-    const isVideo = (url) => {
-        return url?.match(/\.(mp4|webm|mov|avi|mkv)$/i);
-    };
 
     return (
-        <Box style={{ position: 'relative' }}>
+        <div style={{ position: 'relative' }}>
             {
                 message?.text?.includes('.pdf') ?
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ display: 'flex' }}>
                         <img src={iconPDF} alt="pdf-icon" style={{ width: 80 }} />
                         <Typography style={{ fontSize: 14 }} >{message.text.split("/").pop()}</Typography>
                     </div>
-                    : isVideo(message.text) ?
-                        <video
-                            controls
-                            style={{
-                                width: '100%',
-                                maxWidth: '300px',
-                                height: 'auto',
-                                borderRadius: '10px'
-                            }}
-                        >
-                            <source src={message.text} />
-                            Your browser does not support the video tag.
-                        </video>
-                        :
-                        <img
-                            style={{
-                                width: '100%',
-                                maxWidth: '300px',
-                                height: 'auto',
-                                objectFit: 'contain',
-                                borderRadius: '10px'
-                            }}
-                            src={message.text}
-                            alt={message.text}
-                        />
+                : 
+                    <img style={{ width: 300, height: '100%', objectFit: 'cover' }} src={message.text} alt={message.text} />
             }
             <Time style={{ position: 'absolute', bottom: 0, right: 0 }}>
-                <GetAppIcon
-                    onClick={(e) => downloadMedia(e, message.text)}
-                    fontSize='small'
-                    style={{ marginRight: 10, border: '1px solid rgba(255,255,255,0.5)', borderRadius: '50%', cursor: 'pointer' }}
+                <GetAppIcon 
+                    onClick={(e) => downloadMedia(e, message.text)} 
+                    fontSize='small' 
+                    style={{ marginRight: 10, border: '1px solid grey', borderRadius: '50%' }} 
                 />
                 {formatDate(message.createdAt)}
             </Time>
-        </Box>
+        </div>
     )
 }
 

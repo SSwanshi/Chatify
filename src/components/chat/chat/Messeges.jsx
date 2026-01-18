@@ -6,26 +6,18 @@ import { newMessage, getMessages } from '../../../service/api';
 import Message from './Message';
 
 const Wrapper = styled(Box)`
-    background: transparent;
-    display: flex;
-    flex-direction: column;
-    flex: 1; // Take remaining space
-    overflow: hidden; // Prevent double scrollbars
+    background-image: url('https://img.freepik.com/free-vector/gradient-dark-dynamic-lines-background_23-2148995950.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-left: 5px;
+    border-radius: 5px;
+    margin-top: 2px;
 `;
 
 const Component = styled(Box)`
-    flex: 1;
-    overflow-y: auto;
-    padding-top: 20px;
-    
-    // Custom scrollbar
-    &::-webkit-scrollbar {
-        width: 6px;
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 3px;
-    }
+    height: 80vh;
+    overflow-y: scroll;
 `;
 
 const Container = styled(Box)`
@@ -44,13 +36,20 @@ const Messages = ({ person, conversation }) => {
     const scrollRef = useRef();
 
     useEffect(() => {
-        socket.current.on('getMessage', data => {
+        const handleMessage = data => {
             setIncomingMessage({
                 ...data,
                 createdAt: Date.now()
             })
-        })
-    }, [socket])
+        };
+
+        const currentSocket = socket.current;
+        currentSocket.on('getMessage', handleMessage);
+
+        return () => {
+            currentSocket.off('getMessage', handleMessage);
+        };
+    }, [socket, setIncomingMessage]);
 
     // Fetching messages when conversation changes or new messages are received
     useEffect(() => {
@@ -65,7 +64,7 @@ const Messages = ({ person, conversation }) => {
             }
         };
         getMessageDetails();
-    }, [person._id, conversation?._id, newMessageFlag]);
+    }, [conversation?._id, newMessageFlag, setMessages]);
 
     // Scroll to the bottom when messages change
     useEffect(() => {
@@ -79,13 +78,12 @@ const Messages = ({ person, conversation }) => {
 
     useEffect(() => {
         incomingMessage && conversation?.members?.includes(incomingMessage.senderId) &&
-            incomingMessage.senderId !== account.sub && // Prevent processing own messages from socket
             setMessages(prev => [...prev, incomingMessage])
-    }, [incomingMessage, conversation, account.sub])
+    }, [incomingMessage, conversation, setMessages])
 
     const sendText = async (e) => {
         const code = e.keyCode || e.which;
-        if (code === 13 && (value.trim() || file)) {
+        if (code === 13 && value.trim()) {
             let message = {};
             if (!file) {
                 message = {
@@ -93,8 +91,7 @@ const Messages = ({ person, conversation }) => {
                     receiverId: person.sub,
                     conversationId: conversation._id,
                     type: 'text',
-                    text: value,
-                    createdAt: Date.now() // Add timestamp for immediate display
+                    text: value
                 };
             } else {
                 message = {
@@ -102,8 +99,7 @@ const Messages = ({ person, conversation }) => {
                     receiverId: person.sub,
                     conversationId: conversation._id,
                     type: 'file',
-                    text: image,
-                    createdAt: Date.now()
+                    text: image
                 };
             }
 
@@ -140,7 +136,6 @@ const Messages = ({ person, conversation }) => {
                 file={file}
                 setFile={setFile}
                 setImage={setImage}
-                image={image}
             />
         </Wrapper>
     );

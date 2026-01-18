@@ -4,13 +4,15 @@ import { Box, Typography, styled, Menu, MenuItem } from '@mui/material';
 import { Search, MoreVert } from '@mui/icons-material';
 
 const Header = styled(Box)`
-    height: 60px;
-    background: transparent;
+    height: 44px;
+    background: #070F2B;
     display: flex;
-    padding: 0 20px;
+    padding: 8px 16px;
     align-items: center;
-    color: #e2e8f0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ededed;
+    border-radius: 11px;
+    margin-top: 7px;
+    margin-left: 5px;
 `;
 
 const Image = styled('img')({
@@ -22,8 +24,7 @@ const Image = styled('img')({
 
 const Name = styled(Typography)`
     margin-left: 12px !important;
-    color: #f1f5f9;
-    font-weight: 600;
+    color: #ededed;
 `;
 
 const RightContainer = styled(Box)`
