@@ -6,8 +6,9 @@ import { AccountContext } from '../context/AccountProvider';
 
 const Component = styled(Box)`
     height: 100vh;
-    background: #0B0C10;
+    background: #0f172a;
 `;
+
 
 const Header = styled(AppBar)`
     height: 120px;
@@ -28,15 +29,9 @@ const Messenger = () => {
         <Component>
             {
                 account ?
-                    <>
-                        <Header>
-                            <Toolbar>
-
-                            </Toolbar>
-                        </Header>
-                        <ChatDialog /> 
-                    </>
+                    <ChatDialog />
                     :
+
                     <>
                         <LoginHeader>
                             <Toolbar>

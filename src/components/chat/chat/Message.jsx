@@ -3,6 +3,7 @@ import { formatDate, downloadMedia } from '../../../utils/common-utils'
 import { useContext } from 'react'
 import { AccountContext } from '../../../context/AccountProvider'
 import { GetApp, Description } from '@mui/icons-material';
+import { url } from '../../../service/api';
 
 const Own = styled(Box)`
     background: #6366f1;
@@ -57,6 +58,7 @@ const FileContainer = styled(Box)`
 
 const ImageMessage = ({ message }) => {
     const isPdf = message?.text?.includes('.pdf');
+    const fileSource = message.text?.startsWith('http') ? message.text : `${url}/file/${message.text}`;
 
     return (
         <FileContainer>
@@ -71,11 +73,11 @@ const ImageMessage = ({ message }) => {
                 <Box sx={{ position: 'relative', overflow: 'hidden', borderRadius: '12px' }}>
                     <img
                         style={{ width: '100%', maxHeight: 400, objectFit: 'cover', display: 'block' }}
-                        src={message.text}
+                        src={fileSource}
                         alt="media"
                     />
                     <Box
-                        onClick={(e) => downloadMedia(e, message.text)}
+                        onClick={(e) => downloadMedia(e, fileSource)}
                         sx={{
                             position: 'absolute',
                             top: 8,

@@ -9,11 +9,13 @@ const Wrapper = styled(Box)`
     background-color: #0f172a;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    flex: 1;
+    overflow: hidden;
 `;
 
+
 const Component = styled(Box)`
-    height: calc(100vh - 140px);
+    flex: 1;
     overflow-y: auto;
     padding: 20px 40px;
     display: flex;
@@ -37,7 +39,7 @@ const Messages = ({ person, conversation }) => {
     const [messages, setMessages] = useState([]);
     const { account, socket, newMessageFlag, setNewMessageFlag } = useContext(AccountContext);
 
-    const [file, setFile] = useState();
+    const [file, setFile] = useState(null);
     const [image, setImage] = useState('');
     const [incomingMessage, setIncomingMessage] = useState(null);
 
@@ -89,11 +91,13 @@ const Messages = ({ person, conversation }) => {
         }
     }, [incomingMessage, conversation]);
 
-    const sendText = async (e) => {
+    const sendText = async (e, uploadedFileText) => {
         const code = e.keyCode || e.which;
-        if (code === 13 && (value.trim() || file)) {
+        if (code === 13 && (value.trim() || uploadedFileText || file)) {
             let message = {};
-            if (!file) {
+            const textToSend = uploadedFileText || image || value;
+
+            if (!file && !uploadedFileText) {
                 message = {
                     senderId: account.sub,
                     receiverId: person.sub,
@@ -107,7 +111,7 @@ const Messages = ({ person, conversation }) => {
                     receiverId: person.sub,
                     conversationId: conversation._id,
                     type: 'file',
-                    text: image
+                    text: textToSend
                 };
             }
 
@@ -127,6 +131,7 @@ const Messages = ({ person, conversation }) => {
             }
         }
     };
+
 
     return (
         <Wrapper>

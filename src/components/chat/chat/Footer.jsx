@@ -111,7 +111,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
     const handleSendMedia = useCallback(async () => {
         if (!file) return;
 
-        await uploadFile();
+        const uploadedImageUrl = await uploadFile();
 
         const mockEvent = {
             keyCode: 13,
@@ -120,9 +120,8 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
             stopPropagation: () => { }
         };
 
-        // Pass the updated value/image to sendText if necessary, 
-        // but here we rely on the parent state update
-        sendText(mockEvent);
+        sendText(mockEvent, uploadedImageUrl);
+
 
         setShowPreview(false);
         setPreviewUrl('');

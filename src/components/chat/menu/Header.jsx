@@ -1,82 +1,61 @@
-import { useContext, useEffect, useState } from 'react';
-import { Box, styled } from '@mui/material';
+import { useContext, useState } from 'react';
+import { Box, styled, IconButton, Tooltip } from '@mui/material';
 import { AccountContext } from "../../../context/AccountProvider";
 import { Chat as MessageIcon } from '@mui/icons-material';
 import HeaderMenu from './HeaderMenu';
 import InfoDrawer from '../../drawer/InfoDrawer';
 
-
-
 const Component = styled(Box)`
-    height: 44px;
-    background: #070F2B;
-    padding: 8px 16px;
+    height: 70px;
+    background: #0f172a;
     display: flex;
+    padding: 0 24px;
     align-items: center;
-    border-radius: 14px;
-    margin-top: 7px;
-    margin-left: 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 `;
+
+const Image = styled('img')({
+  height: 44,
+  width: 44,
+  borderRadius: '12px',
+  cursor: 'pointer',
+  objectFit: 'cover',
+  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+});
 
 const Wrapper = styled(Box)`
     margin-left: auto;
-    color: #F4F6FF;
     display: flex;
     align-items: center;
     gap: 8px;
 `;
 
-const Image = styled('img')({
-    height: 40,
-    width: 40,
-    borderRadius: '50%',
-    marginRight: 8, 
-});
-
-const DisplayName = styled(Box)`
-    color: #F4F6FF;
-    font-size: 16px; 
-    margin-left: 10px;
-`;
-
-const Baap = styled(Box)`
-  
-`
-
 const Header = () => {
-
   const [openDrawer, setOpenDrawer] = useState(false);
-
   const { account } = useContext(AccountContext);
 
   const toggleDrawer = () => {
     setOpenDrawer(true);
-  }
-
-  useEffect(() => {
-    console.log('User Account Info:', account);
-    console.log('Profile Picture URL:', account?.picture); 
-  }, [account]);
+  };
 
   return (
-    
-    <Baap>
+    <>
       <Component>
-      <Image src={account?.picture || '/avatar.jpeg'} alt="dp" onClick={toggleDrawer}/>
-      <DisplayName>
-        {account.name}
-      </DisplayName>
-      <Wrapper>
-        <MessageIcon sx={{ fontSize: 23 }} /> 
-        <HeaderMenu  setOpenDrawer={setOpenDrawer}/>
-      </Wrapper>
-    </Component>
-    <InfoDrawer open={openDrawer} setOpen={setOpenDrawer} profile={true} />
-    
-    </Baap>
-    
-    
+        <Tooltip title="Profile">
+          <Image src={account?.picture || '/avatar.jpeg'} alt="dp" onClick={toggleDrawer} />
+        </Tooltip>
+
+        <Wrapper>
+          <IconButton sx={{ color: '#94a3b8', '&:hover': { color: '#818cf8' } }}>
+            <MessageIcon />
+          </IconButton>
+          <HeaderMenu setOpenDrawer={setOpenDrawer} />
+        </Wrapper>
+      </Component>
+      <InfoDrawer open={openDrawer} setOpen={setOpenDrawer} profile={true} />
+    </>
   );
 };
 
 export default Header;
+
