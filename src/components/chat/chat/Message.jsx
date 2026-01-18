@@ -57,8 +57,10 @@ const FileContainer = styled(Box)`
 `;
 
 const ImageMessage = ({ message }) => {
-    const isPdf = message?.text?.includes('.pdf');
-    const fileSource = message.text?.startsWith('http') ? message.text : `${url}/file/${message.text}`;
+    const text = message?.text || '';
+    const isPdf = text.includes('.pdf');
+    const isVideo = text.match(/\.(mp4|webm|ogg|mov)$/i);
+    const fileSource = text.startsWith('http') ? text : `${url}/file/${text}`;
 
     return (
         <FileContainer>
@@ -66,8 +68,34 @@ const ImageMessage = ({ message }) => {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, background: 'rgba(0,0,0,0.1)', p: 1.5, borderRadius: '12px' }}>
                     <Description sx={{ fontSize: 32, color: '#f8fafc' }} />
                     <Typography sx={{ fontSize: 13, fontWeight: 500 }}>
-                        {message.text.split("/").pop()}
+                        {text.split("/").pop()}
                     </Typography>
+                </Box>
+            ) : isVideo ? (
+                <Box sx={{ position: 'relative', overflow: 'hidden', borderRadius: '12px', minWidth: '250px' }}>
+                    <video
+                        src={fileSource}
+                        style={{ width: '100%', maxHeight: 400, display: 'block' }}
+                        controls
+                    />
+                    <Box
+                        onClick={(e) => downloadMedia(e, fileSource)}
+                        sx={{
+                            position: 'absolute',
+                            top: 8,
+                            right: 8,
+                            bgcolor: 'rgba(0,0,0,0.4)',
+                            color: 'white',
+                            p: 0.5,
+                            borderRadius: '50%',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            zIndex: 1,
+                            '&:hover': { bgcolor: 'rgba(0,0,0,0.6)' }
+                        }}
+                    >
+                        <GetApp fontSize="small" />
+                    </Box>
                 </Box>
             ) : (
                 <Box sx={{ position: 'relative', overflow: 'hidden', borderRadius: '12px' }}>
@@ -97,10 +125,10 @@ const ImageMessage = ({ message }) => {
             )}
             <Time
                 sx={{
-                    position: isPdf ? 'static' : 'absolute',
-                    bottom: isPdf ? 0 : 8,
-                    right: isPdf ? 0 : 12,
-                    textShadow: isPdf ? 'none' : '0 1px 2px rgba(0,0,0,0.5)'
+                    position: (isPdf || isVideo) ? 'static' : 'absolute',
+                    bottom: (isPdf || isVideo) ? 0 : 8,
+                    right: (isPdf || isVideo) ? 0 : 12,
+                    textShadow: (isPdf || isVideo) ? 'none' : '0 1px 2px rgba(0,0,0,0.5)'
                 }}
             >
                 {formatDate(message.createdAt)}
@@ -108,6 +136,7 @@ const ImageMessage = ({ message }) => {
         </FileContainer>
     );
 }
+
 
 const TextMessage = ({ message, isOwn }) => {
     return (

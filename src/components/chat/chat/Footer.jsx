@@ -155,7 +155,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
             setValue(selectedFile.name);
             setShowPreview(true);
 
-            if (selectedFile.type.startsWith('image/')) {
+            if (selectedFile.type.startsWith('image/') || selectedFile.type.startsWith('video/')) {
                 const url = URL.createObjectURL(selectedFile);
                 setPreviewUrl(url);
             } else {
@@ -172,7 +172,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
                 id='fileInput'
                 style={{ display: 'none' }}
                 onChange={onFileChange}
-                accept="image/*,application/pdf"
+                accept="image/*,video/*,application/pdf"
             />
 
             <IconButton
@@ -189,7 +189,15 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
                         {showPreview && (
                             <MediaPreview>
                                 {previewUrl ? (
-                                    <PreviewImage src={previewUrl} alt="Preview" />
+                                    file?.type?.startsWith('video/') ? (
+                                        <video
+                                            src={previewUrl}
+                                            style={{ maxWidth: '100%', maxHeight: '250px', borderRadius: '12px' }}
+                                            controls
+                                        />
+                                    ) : (
+                                        <PreviewImage src={previewUrl} alt="Preview" />
+                                    )
                                 ) : (
                                     <FilePlaceholder>
                                         <Description sx={{ fontSize: 48 }} />

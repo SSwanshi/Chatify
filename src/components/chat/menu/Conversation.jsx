@@ -86,8 +86,10 @@ const Conversation = ({ user }) => {
         if (!message?.text) return '';
         if (message.text.includes('.pdf')) return 'Shared a PDF';
         if (message.text.match(/\.(jpg|jpeg|png|gif|bmp|svg)$/i)) return 'Shared an image';
+        if (message.text.match(/\.(mp4|webm|ogg|mov)$/i)) return 'Shared a video';
         return message.text;
     };
+
 
     return (
         <ConversationContainer
