@@ -111,7 +111,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
     const handleSendMedia = useCallback(async () => {
         if (!file) return;
 
-        const uploadedImageUrl = await uploadFile();
+        await uploadFile();
 
         const mockEvent = {
             keyCode: 13,

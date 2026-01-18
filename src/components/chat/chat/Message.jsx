@@ -3,7 +3,6 @@ import { formatDate, downloadMedia } from '../../../utils/common-utils'
 import { useContext } from 'react'
 import { AccountContext } from '../../../context/AccountProvider'
 import { GetApp, Description } from '@mui/icons-material';
-import { iconPDF } from '../../../constants/data';
 
 const Own = styled(Box)`
     background: #6366f1;
