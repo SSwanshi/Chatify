@@ -2,85 +2,100 @@ import { Box, styled, Typography } from '@mui/material';
 import { AccountContext } from "../../../context/AccountProvider";
 import { useContext } from "react";
 
-
-const Container = styled(Box)`
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
+const Component = styled(Box)`
+    background: #0f172a;
     height: 100vh;
-    flex-direction: column;
-`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
 
-const GifImage = styled('img')({
-    height: 250,
-    width: 250,
-    borderRadius: '50%',
-});
+    &::before {
+        content: '';
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0) 70%);
+        top: -200px;
+        right: -100px;
+        border-radius: 50%;
+    }
 
-const Welcome1 = styled(Typography)`
-    color: #fff;
-    font-size: 1.8rem;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    padding: 10px 20px;
-    margin: 20px 0;
-    
-`;
-
-const Welcome = styled(Typography)`
-    color: #fff;
-    font-size: 1.8rem;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    padding: 10px 20px;
-    margin: 20px 0;
-    background: linear-gradient(135deg, #2193b0, #6dd5ed);
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-    &:hover {
-        transform: scale(1.05);
-        box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    &::after {
+        content: '';
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, rgba(168, 85, 247, 0) 70%);
+        bottom: -150px;
+        left: -100px;
+        border-radius: 50%;
     }
 `;
 
-const NewFooter = styled(Box)`
+const Container = styled(Box)`
     text-align: center;
-    padding: 10px;
-    background-color: #f1f1f1;
-    color: #333;
-    font-size: 0.9rem;
+    z-index: 10;
+    padding: 40px;
+    background: rgba(30, 41, 59, 0.5);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    max-width: 500px;
+    width: 90%;
+`;
+
+const Title = styled(Typography)`
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+`;
+
+const UserName = styled('span')`
+    background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+`;
+
+const Subtitle = styled(Typography)`
+    font-family: 'Inter', sans-serif;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-top: 16px;
+`;
+
+const Divider = styled(Box)`
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #6366f1, #a855f7);
+    border-radius: 2px;
+    margin: 24px auto;
 `;
 
 const EmptyChat = () => {
-
     const { account } = useContext(AccountContext);
 
     return (
-        <Container>
-            <Box>
-                <Container>
-                    <GifImage src="https://media.giphy.com/media/Cmr1OMJ2FN0B2/giphy.gif" alt="Hello GIF" />
-                    <Box>
-                        <Welcome1 variant="h5" component="div">
-                            <p>Welcome 🤘</p>
-                            <Welcome>{account.name}</Welcome>
-                            <p>Select any Contact ID to Start a Chat</p>
-                            <NewFooter >
-
-                            </NewFooter>
-                        </Welcome1>
-                    </Box>
-                </Container>
-            </Box>
-
-
-        </Container>
-
-    )
-}
+        <Component>
+            <Container>
+                <Title variant="h1">
+                    Welcome, <UserName>{account.name}</UserName>
+                </Title>
+                <Divider />
+                <Subtitle>
+                    Your conversations are encrypted and secure.
+                    Select a contact from the menu to start messaging.
+                </Subtitle>
+            </Container>
+        </Component>
+    );
+};
 
 export default EmptyChat;

@@ -1,55 +1,70 @@
-import { Box, Typography } from '@mui/material';
-import { styled } from '@mui/system';
+import { Box, Typography, styled } from '@mui/material';
 import { AccountContext } from '../../../context/AccountProvider';
 import { useContext, useEffect, useState } from 'react';
 import { setConversation, getConversation } from '../../../service/api';
 import { formatDate } from '../../../utils/common-utils';
 
-
 const ConversationContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
-    padding: '10px',
-    marginTop: '10px',
-    borderRadius: '18px',
-    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
-    backgroundColor: '#1F2937',
+    padding: '12px 16px',
+    borderRadius: '12px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease-in-out',
+    margin: '4px 8px',
     '&:hover': {
-        backgroundColor: '#374151',
+        background: 'rgba(255, 255, 255, 0.05)',
     },
+    '&.selected': {
+        background: 'rgba(99, 102, 241, 0.1)',
+        border: '1px solid rgba(99, 102, 241, 0.2)',
+    }
 }));
 
-const ImageContainer = styled(Box)({
-    width: '50px',
-    height: '50px',
-    borderRadius: '50%',
-    overflow: 'hidden',
-    marginRight: '15px',
+const Image = styled('img')({
+    width: 48,
+    height: 48,
+    objectFit: 'cover',
+    borderRadius: '12px',
+    marginRight: '16px',
 });
 
-const NameText = styled(Typography)(({ theme }) => ({
-    fontSize: '16px',
-    fontWeight: 'bold',
-    color: '#F4F6FF',
-    display: 'flex'
-}));
-
-const Timestamp = styled(Typography)`
-    font-size: 12px;
-    margin-left: auto;
-    color: rgba(156, 163, 175, 0.8);
-    margin-right: 20px;
+const Content = styled(Box)`
+    flex: 1;
+    overflow: hidden;
 `;
 
-const Text = styled(Typography)`
-    display: block;
-    color: rgba(209, 213, 219, 0.9);
-    font-size: 14px;
+const Header = styled(Box)`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+`;
+
+const Name = styled(Typography)`
+    font-size: 15px;
+    font-weight: 600;
+    color: #f8fafc;
+    font-family: 'Inter', sans-serif;
+`;
+
+const Time = styled(Typography)`
+    font-size: 12px;
+    color: #64748b;
+    font-family: 'Inter', sans-serif;
+`;
+
+const LastMessage = styled(Typography)`
+    font-size: 13px;
+    color: #94a3b8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'Inter', sans-serif;
 `;
 
 const Conversation = ({ user }) => {
-    const { setPerson, account, newMessageFlag } = useContext(AccountContext);
-
+    const { setPerson, account, newMessageFlag, person } = useContext(AccountContext);
     const [message, setMessage] = useState({});
 
     useEffect(() => {
@@ -58,37 +73,42 @@ const Conversation = ({ user }) => {
             setMessage({ text: data?.message, timestamp: data?.updatedAt });
         }
         getConversationDetails();
-    }, [newMessageFlag, account.sub, user.sub, setMessage]);
+    }, [newMessageFlag, account.sub, user.sub]);
 
     const getUser = async () => {
         setPerson(user);
         await setConversation({ senderId: account.sub, receiverId: user.sub });
     };
 
-    const fileText = message?.text && (
-        message.text.includes('.pdf') ? 'PDF File' :
-            message.text.match(/\.(jpg|jpeg|png|gif|bmp|svg)$/i) ? 'Image' : null
-    );
+    const isSelected = person.sub === user.sub;
+
+    const getDisplayMessage = () => {
+        if (!message?.text) return '';
+        if (message.text.includes('.pdf')) return 'Shared a PDF';
+        if (message.text.match(/\.(jpg|jpeg|png|gif|bmp|svg)$/i)) return 'Shared an image';
+        return message.text;
+    };
 
     return (
-        <ConversationContainer onClick={() => getUser()}>
-            <ImageContainer>
-                <img
-                    src={user.picture}
-                    alt="dp"
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-            </ImageContainer>
-
-            <Box style={{ width: '100%' }}>
-                <NameText>
-                    {user.name}
-                    {message?.text && <Timestamp> {formatDate(message?.timestamp)} </Timestamp>}
-                </NameText>
-                <Text>{fileText || message.text}</Text>
-            </Box>
+        <ConversationContainer
+            onClick={() => getUser()}
+            className={isSelected ? 'selected' : ''}
+        >
+            <Image src={user.picture} alt="avatar" />
+            <Content>
+                <Header>
+                    <Name>{user.name}</Name>
+                    {message?.timestamp && (
+                        <Time>{formatDate(message.timestamp)}</Time>
+                    )}
+                </Header>
+                <LastMessage>
+                    {getDisplayMessage()}
+                </LastMessage>
+            </Content>
         </ConversationContainer>
     );
 };
 
 export default Conversation;
+

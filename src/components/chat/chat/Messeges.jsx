@@ -6,22 +6,30 @@ import { newMessage, getMessages } from '../../../service/api';
 import Message from './Message';
 
 const Wrapper = styled(Box)`
-    background-image: url('https://img.freepik.com/free-vector/gradient-dark-dynamic-lines-background_23-2148995950.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    margin-left: 5px;
-    border-radius: 5px;
-    margin-top: 2px;
+    background-color: #0f172a;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 `;
 
 const Component = styled(Box)`
-    height: 80vh;
-    overflow-y: scroll;
-`;
+    height: calc(100vh - 140px);
+    overflow-y: auto;
+    padding: 20px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 
-const Container = styled(Box)`
-    padding: 1px 20px;
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
 `;
 
 const Messages = ({ person, conversation }) => {
@@ -44,14 +52,17 @@ const Messages = ({ person, conversation }) => {
         };
 
         const currentSocket = socket.current;
-        currentSocket.on('getMessage', handleMessage);
+        if (currentSocket) {
+            currentSocket.on('getMessage', handleMessage);
+        }
 
         return () => {
-            currentSocket.off('getMessage', handleMessage);
+            if (currentSocket) {
+                currentSocket.off('getMessage', handleMessage);
+            }
         };
-    }, [socket, setIncomingMessage]);
+    }, [socket]);
 
-    // Fetching messages when conversation changes or new messages are received
     useEffect(() => {
         const getMessageDetails = async () => {
             try {
@@ -64,26 +75,23 @@ const Messages = ({ person, conversation }) => {
             }
         };
         getMessageDetails();
-    }, [conversation?._id, newMessageFlag, setMessages]);
+    }, [conversation?._id, newMessageFlag]);
 
-    // Scroll to the bottom when messages change
     useEffect(() => {
-        if (messages.length > 0 && scrollRef.current) {
-            const timer = setTimeout(() => {
-                scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            }, 0); // Delaying to ensure the DOM is updated
-            return () => clearTimeout(timer);
+        if (scrollRef.current) {
+            scrollRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [messages]);
 
     useEffect(() => {
-        incomingMessage && conversation?.members?.includes(incomingMessage.senderId) &&
-            setMessages(prev => [...prev, incomingMessage])
-    }, [incomingMessage, conversation, setMessages])
+        if (incomingMessage && conversation?.members?.includes(incomingMessage.senderId)) {
+            setMessages(prev => [...prev, incomingMessage]);
+        }
+    }, [incomingMessage, conversation]);
 
     const sendText = async (e) => {
         const code = e.keyCode || e.which;
-        if (code === 13 && value.trim()) {
+        if (code === 13 && (value.trim() || file)) {
             let message = {};
             if (!file) {
                 message = {
@@ -103,13 +111,15 @@ const Messages = ({ person, conversation }) => {
                 };
             }
 
-            socket.current.emit('sendMessage', message);
+            if (socket.current) {
+                socket.current.emit('sendMessage', message);
+            }
 
             try {
                 await newMessage(message);
                 setMessages((prev) => [...prev, message]);
                 setValue('');
-                setFile('');
+                setFile(null);
                 setImage('');
                 setNewMessageFlag(prev => !prev);
             } catch (error) {
@@ -123,14 +133,15 @@ const Messages = ({ person, conversation }) => {
             <Component>
                 {
                     messages && messages.map((message, index) => (
-                        <Container key={index}>
+                        <Box key={index}>
                             <Message message={message} />
-                        </Container>
+                        </Box>
                     ))
                 }
                 <div ref={scrollRef} />
             </Component>
-            <Footer sendText={sendText}
+            <Footer
+                sendText={sendText}
                 setValue={setValue}
                 value={value}
                 file={file}
@@ -142,3 +153,4 @@ const Messages = ({ person, conversation }) => {
 };
 
 export default Messages;
+
