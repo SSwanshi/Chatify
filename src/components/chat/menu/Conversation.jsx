@@ -12,10 +12,10 @@ const ConversationContainer = styled(Box)(({ theme }) => ({
     padding: '10px',
     marginTop: '10px',
     borderRadius: '18px',
-    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-    backgroundColor: '#384B70',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+    backgroundColor: '#1F2937',
     '&:hover': {
-        backgroundColor: '#507687',
+        backgroundColor: '#374151',
     },
 }));
 
@@ -30,20 +30,20 @@ const ImageContainer = styled(Box)({
 const NameText = styled(Typography)(({ theme }) => ({
     fontSize: '16px',
     fontWeight: 'bold',
-    color: '#FCFAEE',
+    color: '#F4F6FF',
     display: 'flex'
 }));
 
 const Timestamp = styled(Typography)`
     font-size: 12px;
     margin-left: auto;
-    color:rgba(207, 196, 196, 0.6);
+    color: rgba(156, 163, 175, 0.8);
     margin-right: 20px;
 `;
 
 const Text = styled(Typography)`
     display: block;
-    color: rgba(216, 210, 210, 0.83);
+    color: rgba(209, 213, 219, 0.9);
     font-size: 14px;
 `;
 

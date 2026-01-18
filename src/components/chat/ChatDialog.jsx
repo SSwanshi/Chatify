@@ -26,7 +26,7 @@ const dialogStyle = {
     maxWidth: '100%',
     maxHeight: '100%',
     boxShadow: 'none',
-    backgroundColor: '#2D3250',
+    backgroundColor: '#0F1419',
     overflow: 'hidden',
   };
 const ChatDialog = () => {

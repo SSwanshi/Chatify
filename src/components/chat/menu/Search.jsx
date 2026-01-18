@@ -3,9 +3,9 @@ import { InputBase } from '@mui/material';
 import { Box, styled } from '@mui/material';
 
 const Component = styled(Box)`
-    background: #fff;
+    background: #1F2937;
     height: 45px;
-    border-bottom: 1px solid #F2F2F2;
+    border-bottom: 1px solid #374151;
     display: flex;
     align-items: center;
     padding: 0 10px;
@@ -28,9 +28,9 @@ const Icon = styled(Box)`
 
 const InputField = styled(InputBase)`
     flex: 1;
-    height: 100%; 
+    height: 100%;
     &::placeholder {
-        color: #B0B0B0; 
+        color: #9CA3AF;
     }
 `;
 

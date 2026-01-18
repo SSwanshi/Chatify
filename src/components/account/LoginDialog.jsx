@@ -10,7 +10,7 @@ const OuterContainer = styled(Box)`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, #6A9AB0, #4F7D8E);
+  background: linear-gradient(135deg, #0F1419, #1F2937);
   padding: 20px;
 `;
 
@@ -19,11 +19,29 @@ const DialogContainer = styled(Box)`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  background-color: #fff;
+  background-color: #1F2937;
   border-radius: 20px;
   width: 400px;
   padding: 30px;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  animation: fadeIn 0.5s ease-in-out;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.5);
+  }
 
   @media (max-width: 768px) {
     width: 80%;
@@ -58,7 +76,7 @@ const Header = styled(Box)`
   h1 {
     font-size: 1.8rem;
     font-weight: bold;
-    color:rgb(39, 63, 71);
+    color: #F4F6FF;
     margin: 0;
 
     @media (max-width: 768px) {
@@ -69,7 +87,7 @@ const Header = styled(Box)`
   h3 {
     font-size: 1rem;
     font-weight: 400;
-    color:rgb(42, 62, 71);
+    color: #CBD5E1;
     margin: 0;
 
     @media (max-width: 768px) {
@@ -86,17 +104,23 @@ const LoginSection = styled(Box)`
   margin-top: 20px;
 
   button {
-    background-color: #6A9AB0;
+    background-color: #3B82F6;
     color: white;
     padding: 10px 20px;
     font-size: 1rem;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
+    transform: scale(1);
 
     &:hover {
-      background-color: #4F7D8E;
+      background-color: #2563EB;
+      transform: scale(1.02);
+    }
+
+    &:active {
+      transform: scale(0.98);
     }
 
     @media (max-width: 768px) {
@@ -110,7 +134,7 @@ const Footer = styled(Box)`
   margin-top: 20px;
   text-align: center;
   font-size: 0.9rem;
-  color: #4F7D8E;
+  color: #94A3B8;
 
   @media (max-width: 768px) {
     font-size: 0.8rem;

@@ -18,11 +18,11 @@ code {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(241, 237, 237, 0.855);
+  background-color: rgba(59, 130, 246, 0.6);
 }
 
 ::-webkit-scrollbar-track {
-  background: hsla(0, 1%, 55%, 0.341);
+  background: rgba(15, 20, 25, 0.3);
 }
 
 @media (max-width: 768px) {
