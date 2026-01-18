@@ -42,10 +42,12 @@ const Messages = ({ person, conversation }) => {
                 createdAt: Date.now()
             })
         };
-        socket.current.on('getMessage', handleMessage);
+
+        const currentSocket = socket.current;
+        currentSocket.on('getMessage', handleMessage);
 
         return () => {
-            socket.current.off('getMessage', handleMessage);
+            currentSocket.off('getMessage', handleMessage);
         };
     }, [socket, setIncomingMessage]);
 

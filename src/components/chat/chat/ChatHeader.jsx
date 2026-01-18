@@ -2,7 +2,6 @@ import { useContext, useState } from 'react';
 import { AccountContext } from '../../../context/AccountProvider';
 import { Box, Typography, styled, Menu, MenuItem } from '@mui/material';
 import { Search, MoreVert } from '@mui/icons-material';
-import { defaultProfilePicture } from '../../../constants/data';
 
 const Header = styled(Box)`
     height: 44px;
