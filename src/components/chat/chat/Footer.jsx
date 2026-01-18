@@ -104,20 +104,30 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
     }, [setFile, setValue]);
 
     const handleSendMedia = useCallback(async () => {
+        // First upload the file
         await uploadFile();
+        // Then send the message by simulating Enter key press
+        const mockEvent = {
+            keyCode: 13,
+            which: 13,
+            preventDefault: () => {},
+            stopPropagation: () => {}
+        };
+        sendText(mockEvent);
         setShowPreview(false);
         setPreviewUrl('');
         // Reset file input
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
         }
-    }, [uploadFile]);
+    }, [uploadFile, sendText]);
 
     useEffect(() => {
-        const handleKeyDown = (e) => {
+        const handleKeyDown = async (e) => {
             if (showPreview) {
                 if (e.key === 'Enter') {
-                    handleSendMedia();
+                    e.preventDefault();
+                    await handleSendMedia();
                 } else if (e.key === 'Escape') {
                     handleCancelMedia();
                 }
