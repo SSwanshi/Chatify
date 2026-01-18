@@ -5,7 +5,7 @@ function App() {
 
   return (
     <div className="App">
-      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+      <GoogleOAuthProvider clientId= '939530381645-4j5an0ufqhlmph1g2a3ha133n7596n22.apps.googleusercontent.com'>
         <AccountProvider>
           <Messenger />
         </AccountProvider>

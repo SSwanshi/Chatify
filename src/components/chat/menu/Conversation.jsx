@@ -6,45 +6,59 @@ import { setConversation, getConversation } from '../../../service/api';
 import { formatDate } from '../../../utils/common-utils';
 
 
-const ConversationContainer = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    padding: '10px',
-    marginTop: '10px',
-    borderRadius: '18px',
-    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-    backgroundColor: '#384B70',
-    '&:hover': {
-        backgroundColor: '#507687',
-    },
-}));
+const ConversationContainer = styled(Box)`
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    margin: 5px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
 
-const ImageContainer = styled(Box)({
-    width: '50px',
-    height: '50px',
-    borderRadius: '50%',
-    overflow: 'hidden',
-    marginRight: '15px',
-});
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.05);
+    }
+`;
 
-const NameText = styled(Typography)(({ theme }) => ({
-    fontSize: '16px',
-    fontWeight: 'bold',
-    color: '#FCFAEE',
-    display: 'flex'
-}));
+const ImageContainer = styled(Box)`
+    width: 45px;
+    height: 45px;
+    borderRadius: 50%;
+    margin-right: 15px;
+    position: relative;
+    
+    & > img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+`;
+
+const NameText = styled(Typography)`
+    font-size: 1rem;
+    font-weight: 500;
+    color: #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+`;
 
 const Timestamp = styled(Typography)`
-    font-size: 12px;
-    margin-left: auto;
-    color:rgba(207, 196, 196, 0.6);
-    margin-right: 20px;
+    font-size: 0.75rem;
+    color: #94a3b8;
 `;
 
 const Text = styled(Typography)`
     display: block;
-    color: rgba(216, 210, 210, 0.83);
-    font-size: 14px;
+    color: #64748b;
+    font-size: 0.875rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 
 const Conversation = ({ user }) => {
@@ -58,7 +72,7 @@ const Conversation = ({ user }) => {
             setMessage({ text: data?.message, timestamp: data?.updatedAt });
         }
         getConversationDetails();
-    }, [newMessageFlag, account.sub, user.sub, setMessage]);
+    }, [newMessageFlag, account.sub, user.sub]);
 
     const getUser = async () => {
         setPerson(user);

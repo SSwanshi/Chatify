@@ -8,7 +8,7 @@ const ImageContainer = styled(Box)`
     justify-content: center;
 `;
 
-const Image = styled('img') ({
+const Image = styled('img')({
     width: 200,
     height: 200,
     borderRadius: '50%',
@@ -16,24 +16,25 @@ const Image = styled('img') ({
 });
 
 const BoxWrapper = styled(Box)`
-    background: #FFFFFF;
-    padding: 12px 30px 2px;
+    background: rgba(30, 41, 59, 0.4); // Semi transparent card
+    padding: 12px 30px 12px; // Adjusted padding
+    margin: 10px 0;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    & :first-child {
+    & :first-child { // first-of-type selector in emotion/styled
         font-size: 13px;
-        color: #009688;
+        color: #38bdf8; // distinct color for label
         font-weight: 200;
     };
     & :last-child {
         margin: 14px 0;
-        color: #4A4A4A;
+        color: #f1f5f9; // white text for value
     }
 `;
 
 const DescriptionContainer = styled(Box)`
     padding: 15px 20px 28px 30px;
     & > p {
-        color: #8696a0;
+        color: #94a3b8;
         font-size: 13px;
     }
 `;

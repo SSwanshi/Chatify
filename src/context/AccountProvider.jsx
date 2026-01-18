@@ -1,9 +1,9 @@
 import { createContext, useState, useRef, useEffect } from 'react';
-import {io} from 'socket.io-client';
+import { io } from 'socket.io-client';
 
 export const AccountContext = createContext(null);
 
-const AccountProvider = ({children}) => {
+const AccountProvider = ({ children }) => {
 
     const [account, setAccount] = useState();
     const [person, setPerson] = useState({});
@@ -12,13 +12,14 @@ const AccountProvider = ({children}) => {
 
     const socket = useRef();
 
-    useEffect(()=>{
-        socket.current = io(process.env.REACT_APP_SOCKET_URL);
+    useEffect(() => {
+        socket.current = io('https://chatify-socket.onrender.com'); // Production Socket URL
+        // socket.current = io('ws://localhost:9000'); // Localhost for testing port 9000
     }, [])
 
 
     return (
-        <AccountContext.Provider value ={{
+        <AccountContext.Provider value={{
             account,
             setAccount,
             person,
@@ -30,7 +31,7 @@ const AccountProvider = ({children}) => {
             setNewMessageFlag
         }}>
             {children}
-            
+
 
         </AccountContext.Provider>
     )

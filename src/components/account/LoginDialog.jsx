@@ -1,158 +1,151 @@
-import { Dialog, Box, styled } from '@mui/material';
+import { Dialog, Box, Typography, styled, Fade } from '@mui/material';
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
 import { useContext } from 'react';
 import { AccountContext } from '../../context/AccountProvider';
 import { addUser } from '../../service/api';
 
-const OuterContainer = styled(Box)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #6A9AB0, #4F7D8E);
-  padding: 20px;
+const Container = styled(Box)`
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at top right, #1e293b, #0f172a);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: -10%;
+        left: -10%;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: 0;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -10%;
+        right: -10%;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
+        border-radius: 50%;
+        filter: blur(100px);
+        z-index: 0;
+    }
 `;
 
-const DialogContainer = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #fff;
-  border-radius: 20px;
-  width: 400px;
-  padding: 30px;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+const GlassCard = styled(Box)`
+    position: relative;
+    z-index: 10;
+    width: 450px;
+    padding: 3rem; 
+    border-radius: 24px;
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    text-align: center;
 
-  @media (max-width: 768px) {
-    width: 80%;
-    padding: 20px;
-  }
+    @media (max-width: 600px) {
+        width: 90%;
+        padding: 2rem;
+    }
 `;
 
-const Header = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-
-  img {
-    width: 150px;
-    height: auto;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-
-    &:hover {
-      transform: scale(1.05);
-      box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    @media (max-width: 768px) {
-      width: 120px;
-    }
-  }
-
-  h1 {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color:rgb(39, 63, 71);
-    margin: 0;
-
-    @media (max-width: 768px) {
-      font-size: 1.2rem;
-    }
-  }
-
-  h3 {
-    font-size: 1rem;
-    font-weight: 400;
-    color:rgb(42, 62, 71);
-    margin: 0;
-
-    @media (max-width: 768px) {
-      font-size: 0.9rem;
-    }
-  }
+const Logo = styled('img')`
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.5);
 `;
 
-const LoginSection = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  margin-top: 20px;
-
-  button {
-    background-color: #6A9AB0;
-    color: white;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-
-    &:hover {
-      background-color: #4F7D8E;
-    }
-
-    @media (max-width: 768px) {
-      padding: 8px 15px;
-      font-size: 0.9rem;
-    }
-  }
+const Title = styled(Typography)`
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
 `;
 
-const Footer = styled(Box)`
-  margin-top: 20px;
-  text-align: center;
-  font-size: 0.9rem;
-  color: #4F7D8E;
+const Subtitle = styled(Typography)`
+    font-family: 'Outfit', sans-serif;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+`;
 
-  @media (max-width: 768px) {
-    font-size: 0.8rem;
-  }
+const StyledDialog = styled(Dialog)`
+    .MuiPaper-root {
+        background: transparent;
+        box-shadow: none;
+        overflow: visible;
+        max-width: none;
+        max-height: none;
+        margin: 0;
+    }
 `;
 
 const LoginDialog = () => {
   const { setAccount } = useContext(AccountContext);
 
   const onLoginSuccess = async (res) => {
-    console.log('Login Success Response:', res);  
-    const decoded = jwtDecode(res.credential);
-    setAccount(decoded);  
-    await addUser(decoded);
-    console.log('Decoded User Info:', decoded); 
+    try {
+      const decoded = jwtDecode(res.credential);
+      setAccount(decoded);
+      await addUser(decoded);
+    } catch (error) {
+      console.error('Login processing error:', error);
+    }
   };
 
   const onLoginError = (error) => {
-    console.error('Login Failed:', error); 
+    console.error('Login Failed:', error);
   };
 
   return (
-    <OuterContainer>
-      <Dialog open={true} PaperProps={{ style: { backgroundColor: 'transparent', boxShadow: 'none' } }}>
-        <DialogContainer>
-          <Header>
-            <img src="../newlogo.png" alt="Logo" />
-            <h1>Welcome to Chatify</h1>
-            <h3>Login or Sign Up to start</h3>
-          </Header>
-          <LoginSection>
-            <GoogleLogin 
+    <Container>
+      <StyledDialog
+        open={true}
+        hideBackdrop={true}
+      >
+        <Fade in={true} timeout={1000}>
+          <GlassCard>
+            <Logo src="/logo192.png" alt="Chatify Logo" />
+            <Box>
+              <Title variant="h1">Chatify</Title>
+              <Subtitle>
+                Experience a new era of messaging.<br />
+                Secure, fast, and beautiful.
+              </Subtitle>
+            </Box>
+
+            <GoogleLogin
               onSuccess={onLoginSuccess}
               onError={onLoginError}
+              theme="filled_black"
+              shape="pill"
+              size="large"
             />
-          </LoginSection>
-          <Footer>
-            <p>&copy; 2024 Chatify - Sarvjeet Swanshi.</p>
-          </Footer>
-        </DialogContainer>
-      </Dialog>
-    </OuterContainer>
+          </GlassCard>
+        </Fade>
+      </StyledDialog>
+    </Container>
   );
 };
 

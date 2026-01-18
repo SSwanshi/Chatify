@@ -1,9 +1,10 @@
 import { Box } from '@mui/material';
 import ChatHeader from './ChatHeader';
 import Messeges from './Messeges';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { AccountContext } from '../../../context/AccountProvider';
 import { getConversation } from '../../../service/api';
+import { useState } from 'react';
 
 const ChatBox = () => {
 
@@ -17,13 +18,13 @@ const ChatBox = () => {
             setConversation(data);
         }
         getConversationDetails();
-    }, [person.sub, account.sub]);
+    }, [person.sub]);
     return (
-        <Box style={{ height: '75%' }}>
+        <Box style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             <ChatHeader person={person} />
             <Messeges person={person} conversation={conversation} />
         </Box>
-    )
+    );
 }
 
 export default ChatBox;

@@ -1,32 +1,46 @@
 import { useEffect, useState, useContext } from 'react';
 import { getUsers } from '../../../service/api';
 import Conversation from './Conversation';
-import { Box, styled, Divider } from '@mui/material';
+import { Box, styled } from '@mui/material';
 import { AccountContext } from '../../../context/AccountProvider';
 
 const Component = styled(Box)`
-    height: 81vh;
-    overflow: overlay;
-`
-
-const StyledDivider = styled(Divider)`
-    margin: 0 0 0 70px;
-`
+    flex: 1; // Take up remaining space
+    overflow-y: auto; // Scroll within this area
+    margin-top: 10px;
+    height: auto; // Remove fixed height
+    
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+`;
 
 const Conversations = ({ text }) => {
-
     const [users, setUsers] = useState([]);
     const { account, socket, setActiveUsers } = useContext(AccountContext);
 
-
     useEffect(() => {
         const fetchData = async () => {
-            let response = await getUsers();
-            const filteredData = response.filter(user => user.name.toLowerCase().includes(text.toLowerCase()));
-            setUsers(filteredData);
+            try {
+                let response = await getUsers();
+                if (response && Array.isArray(response)) {
+                    const filteredData = response.filter(user => user.name.toLowerCase().includes(text.toLowerCase()));
+                    setUsers(filteredData);
+                } else {
+                    console.warn('getUsers returned invalid data:', response);
+                    setUsers([]);
+                }
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                setUsers([]);
+            }
         }
         fetchData();
-    }, [text, setUsers]);
+    }, [text]);
 
     useEffect(() => {
         socket.current.emit('addUsers', account);
@@ -39,13 +53,8 @@ const Conversations = ({ text }) => {
         <Component>
             {
                 users.map(user => (
-
                     user.sub !== account.sub &&
-                    <>
-
-                        <Conversation user={user} />
-                        <StyledDivider />
-                    </>
+                    <Conversation key={user.sub} user={user} />
                 ))
             }
         </Component>

@@ -3,38 +3,47 @@ import { InputBase } from '@mui/material';
 import { Box, styled } from '@mui/material';
 
 const Component = styled(Box)`
-    background: #fff;
-    height: 45px;
-    border-bottom: 1px solid #F2F2F2;
+    background: rgba(30, 41, 59, 0.5);
+    height: 48px;
     display: flex;
     align-items: center;
-    padding: 0 10px;
-    margin-top: 4px;
-    margin-left: 5px;
-    border-radius: 14px;
+    margin: 10px 15px; // Add some margin around the search bar
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: box-shadow 0.3s ease;
+
+    &:focus-within {
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        background: rgba(30, 41, 59, 0.8);
+    }
 `;
 
 const Wrapper = styled(Box)`
     display: flex;
     align-items: center;
     width: 100%;
+    padding: 0 10px;
 `;
 
 const Icon = styled(Box)`
     display: flex;
     align-items: center;
+    color: #94a3b8;
     margin-right: 10px; 
 `;
 
 const InputField = styled(InputBase)`
     flex: 1;
     height: 100%; 
+    color: #f1f5f9;
+    font-size: 0.95rem;
+
     &::placeholder {
-        color: #B0B0B0; 
+        color: #64748b; 
     }
 `;
 
-const Search = ({setText}) => {
+const Search = ({ setText }) => {
     return (
         <Component>
             <Wrapper>
@@ -43,7 +52,7 @@ const Search = ({setText}) => {
                 </Icon>
                 <InputField
                     placeholder='Search or start new chat'
-                    onChange={(e)=>setText(e.target.value)}
+                    onChange={(e) => setText(e.target.value)}
                 />
             </Wrapper>
         </Component>
