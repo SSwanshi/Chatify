@@ -1,6 +1,6 @@
 import { Box, InputBase, styled, IconButton, Typography } from '@mui/material';
 import { AttachFile, EmojiEmotionsOutlined, Close, Send } from '@mui/icons-material';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { UploadFile } from '../../../service/api';
 
 
@@ -78,7 +78,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
     const [previewUrl, setPreviewUrl] = useState('');
     const fileInputRef = useRef(null);
 
-    const uploadFile = async () => {
+    const uploadFile = useCallback(async () => {
         if (file) {
             const data = new FormData();
             data.append("name", file.name);
@@ -90,7 +90,28 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
             setFile(null);
             setValue('');
         }
-    }
+    }, [file, setImage, setFile, setValue]);
+
+    const handleCancelMedia = useCallback(() => {
+        setShowPreview(false);
+        setPreviewUrl('');
+        setFile(null);
+        setValue('');
+        // Reset file input
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    }, [setFile, setValue]);
+
+    const handleSendMedia = useCallback(async () => {
+        await uploadFile();
+        setShowPreview(false);
+        setPreviewUrl('');
+        // Reset file input
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    }, [uploadFile]);
 
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -105,7 +126,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
 
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [showPreview, file]);
+    }, [showPreview, handleSendMedia, handleCancelMedia]);
 
     const onFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -121,27 +142,6 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
             } else {
                 setPreviewUrl('');
             }
-        }
-    }
-
-    const handleSendMedia = async () => {
-        await uploadFile();
-        setShowPreview(false);
-        setPreviewUrl('');
-        // Reset file input
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
-    }
-
-    const handleCancelMedia = () => {
-        setShowPreview(false);
-        setPreviewUrl('');
-        setFile(null);
-        setValue('');
-        // Reset file input
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
         }
     }
 
