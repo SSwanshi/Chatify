@@ -57,9 +57,7 @@ const Title = styled(Typography)`
 `;
 
 const UserName = styled('span')`
-    background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #ffffff;
     font-weight: 800;
 `;
 

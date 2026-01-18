@@ -1,7 +1,6 @@
 import { useContext, useState } from 'react';
 import { Box, styled, IconButton, Tooltip } from '@mui/material';
 import { AccountContext } from "../../../context/AccountProvider";
-import { Chat as MessageIcon } from '@mui/icons-material';
 import HeaderMenu from './HeaderMenu';
 import InfoDrawer from '../../drawer/InfoDrawer';
 
@@ -46,9 +45,7 @@ const Header = () => {
         </Tooltip>
 
         <Wrapper>
-          <IconButton sx={{ color: '#94a3b8', '&:hover': { color: '#818cf8' } }}>
-            <MessageIcon />
-          </IconButton>
+
           <HeaderMenu setOpenDrawer={setOpenDrawer} />
         </Wrapper>
       </Component>

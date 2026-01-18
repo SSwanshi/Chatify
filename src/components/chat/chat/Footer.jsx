@@ -1,4 +1,4 @@
-import { Box, InputBase, styled, IconButton, Typography, Fade } from '@mui/material';
+import { Box, InputBase, styled, IconButton, Typography, Fade, Snackbar, Alert, CircularProgress } from '@mui/material';
 import { AddCircleOutline, Close, Send, Description } from '@mui/icons-material';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { UploadFile } from '../../../service/api';
@@ -9,8 +9,9 @@ const Container = styled(Box)`
     width: 100%;
     display: flex;
     align-items: center;
-    padding: 0 24px;
+    padding: 0 16px;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
+    box-sizing: border-box;
 `;
 
 const InputWrapper = styled(Box)`
@@ -20,7 +21,7 @@ const InputWrapper = styled(Box)`
     border-radius: 16px;
     padding: 8px 16px;
     flex: 1;
-    margin: 0 16px;
+    margin: 0 12px;
     border: 1px solid rgba(255, 255, 255, 0.05);
     transition: all 0.2s ease-in-out;
     position: relative;
@@ -81,6 +82,8 @@ const FilePlaceholder = styled(Box)`
 const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
     const [showPreview, setShowPreview] = useState(false);
     const [previewUrl, setPreviewUrl] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [openToaster, setOpenToaster] = useState(false);
     const fileInputRef = useRef(null);
 
     const uploadFile = useCallback(async () => {
@@ -109,31 +112,40 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
     }, [setFile, setValue]);
 
     const handleSendMedia = useCallback(async () => {
-        if (!file) return;
+        if (!file || loading) return;
 
-        const uploadedImageUrl = await uploadFile();
+        setLoading(true);
+        setOpenToaster(true);
 
-        const mockEvent = {
-            keyCode: 13,
-            which: 13,
-            preventDefault: () => { },
-            stopPropagation: () => { }
-        };
+        try {
+            const uploadedImageUrl = await uploadFile();
 
-        sendText(mockEvent, uploadedImageUrl);
+            const mockEvent = {
+                keyCode: 13,
+                which: 13,
+                preventDefault: () => { },
+                stopPropagation: () => { }
+            };
 
+            await sendText(mockEvent, uploadedImageUrl);
 
-        setShowPreview(false);
-        setPreviewUrl('');
-        setFile(null);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
+            setShowPreview(false);
+            setPreviewUrl('');
+            setFile(null);
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
+        } catch (error) {
+            console.error("Error sending media:", error);
+        } finally {
+            setLoading(false);
+            setOpenToaster(false);
         }
-    }, [file, uploadFile, sendText, setFile]);
+    }, [file, uploadFile, sendText, setFile, loading]);
 
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (showPreview) {
+            if (showPreview && !loading) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
                     handleSendMedia();
@@ -146,7 +158,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [showPreview, handleSendMedia, handleCancelMedia]);
+    }, [showPreview, handleSendMedia, handleCancelMedia, loading]);
 
     const onFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -164,6 +176,11 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
         }
     }
 
+    const handleToasterClose = (event, reason) => {
+        if (reason === 'clickaway') return;
+        setOpenToaster(false);
+    };
+
     return (
         <Container>
             <input
@@ -178,6 +195,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
             <IconButton
                 component="label"
                 htmlFor="fileInput"
+                disabled={loading}
                 sx={{ color: '#94a3b8', '&:hover': { color: '#818cf8', background: 'rgba(129, 140, 248, 0.1)' } }}
             >
                 <AddCircleOutline />
@@ -193,7 +211,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
                                         <video
                                             src={previewUrl}
                                             style={{ maxWidth: '100%', maxHeight: '250px', borderRadius: '12px' }}
-                                            controls
+                                            controls={!loading}
                                         />
                                     ) : (
                                         <PreviewImage src={previewUrl} alt="Preview" />
@@ -207,22 +225,26 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
                                     <Typography sx={{ color: '#f8fafc', fontWeight: 500, mb: 0.5 }}>
                                         {file?.name}
                                     </Typography>
-                                    <Typography sx={{ color: '#64748b', fontSize: 12 }}>
-                                        Press Enter to send • Esc to cancel
-                                    </Typography>
+                                    {!loading && (
+                                        <Typography sx={{ color: '#64748b', fontSize: 12 }}>
+                                            Press Enter to send • Esc to cancel
+                                        </Typography>
+                                    )}
                                 </Box>
                                 <Box sx={{ display: 'flex', gap: 2 }}>
                                     <IconButton
                                         onClick={handleCancelMedia}
+                                        disabled={loading}
                                         sx={{ bgcolor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', '&:hover': { bgcolor: 'rgba(239, 68, 68, 0.2)' } }}
                                     >
                                         <Close />
                                     </IconButton>
                                     <IconButton
                                         onClick={handleSendMedia}
+                                        disabled={loading}
                                         sx={{ bgcolor: 'rgba(16, 185, 129, 0.1)', color: '#10b981', '&:hover': { bgcolor: 'rgba(16, 185, 129, 0.2)' } }}
                                     >
-                                        <Send />
+                                        {loading ? <CircularProgress size={24} color="inherit" /> : <Send />}
                                     </IconButton>
                                 </Box>
                             </MediaPreview>
@@ -235,7 +257,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
                     onChange={(e) => setValue(e.target.value)}
                     onKeyDown={(e) => !showPreview && sendText(e)}
                     value={value}
-                    disabled={showPreview}
+                    disabled={showPreview || loading}
                     autoFocus
                 />
             </InputWrapper>
@@ -245,7 +267,7 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
                     const mockEvent = { keyCode: 13, which: 13, preventDefault: () => { } };
                     sendText(mockEvent);
                 }}
-                disabled={!value.trim() && !file}
+                disabled={(!value.trim() && !file) || loading}
                 sx={{
                     color: '#818cf8',
                     '&:hover': { background: 'rgba(129, 140, 248, 0.1)' },
@@ -254,9 +276,31 @@ const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
             >
                 <Send />
             </IconButton>
+
+            <Snackbar
+                open={openToaster}
+                autoHideDuration={6000}
+                onClose={handleToasterClose}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+                <Alert
+                    onClose={handleToasterClose}
+                    severity="info"
+                    variant="filled"
+                    sx={{
+                        width: '100%',
+                        bgcolor: '#1e293b',
+                        color: '#f8fafc',
+                        '& .MuiAlert-icon': { color: '#818cf8' }
+                    }}
+                >
+                    Please wait for the media to be sent...
+                </Alert>
+            </Snackbar>
         </Container>
     );
 };
 
 export default Footer;
+
 

@@ -1,50 +1,60 @@
-import { Drawer, Typography } from '@mui/material';
+import { Drawer, Typography, IconButton } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { Box, styled } from '@mui/material';
 import Profile from './Profile';
 
 const Header = styled(Box)`
-    background: #E2E2B6;
-    height: 100px;
+    background: #0f172a;
+    height: 70px;
     display: flex;
-    & > svg, & > p {
-        margin-top: auto;
-        padding: 15px;
-        font-weight: 600;
-    }
+    align-items: center;
+    padding: 0 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    gap: 16px;
 `;
 
 const Component = styled(Box)`
-    background: #301E67;
+    background: #0f172a;
     height: 100%;
-`
-
-
-const drawerStyle = {
-    left: 20,
-    top: 17,
-    height: '95%',
-    width: '31%',
-    boxShadow: 'none'
-}
+`;
 
 const StyledTypo = styled(Typography)`
-    color: #000000;
-`
+    color: #f8fafc;
+    font-weight: 600;
+    font-size: 18px;
+    font-family: 'Outfit', sans-serif;
+`;
+
+const drawerStyle = {
+    left: 0,
+    top: 0,
+    height: '100%',
+    width: '400px', // Matches LeftComponent width
+    boxShadow: 'none',
+    backgroundColor: '#0f172a',
+    borderRight: '1px solid rgba(255, 255, 255, 0.05)',
+};
 
 const InfoDrawer = ({ open, setOpen }) => {
     const handleClose = () => {
         setOpen(false);
-    }
+    };
+
     return (
         <Drawer
             open={open}
             onClose={handleClose}
             PaperProps={{ sx: drawerStyle }}
             style={{ zIndex: 1500 }}
+            variant="persistent"
         >
             <Header>
-                <ArrowBack onClick={() => setOpen(false)} sx={{ color: '#000000', '&:hover': { color: '#f0f0f0' } }} />
+                <IconButton
+                    onClick={() => setOpen(false)}
+                    sx={{ color: '#f8fafc', '&:hover': { background: 'rgba(255, 255, 255, 0.05)' } }}
+                >
+                    <ArrowBack />
+                </IconButton>
                 <StyledTypo>
                     Profile
                 </StyledTypo>
@@ -53,7 +63,7 @@ const InfoDrawer = ({ open, setOpen }) => {
                 <Profile />
             </Component>
         </Drawer>
-    )
-}
+    );
+};
 
 export default InfoDrawer;

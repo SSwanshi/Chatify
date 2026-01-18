@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { AccountContext } from '../../../context/AccountProvider';
 import { Box, Typography, styled, Menu, MenuItem, IconButton } from '@mui/material';
-import { Search, MoreVert, FiberManualRecord } from '@mui/icons-material';
+import { MoreVert, FiberManualRecord } from '@mui/icons-material';
 
 const Header = styled(Box)`
     height: 70px;
@@ -84,9 +84,7 @@ const ChatHeader = ({ person }) => {
                 </Status>
             </Box>
             <RightContainer>
-                <IconButton sx={{ color: '#94a3b8' }}>
-                    <Search />
-                </IconButton>
+
                 <IconButton
                     onClick={handleMenuClick}
                     sx={{ color: '#94a3b8' }}
